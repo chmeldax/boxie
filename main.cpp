@@ -31,8 +31,10 @@ int run(void* arg)
     catch (const std::exception& exc)
     {
         std::cerr << "Exception caught " << exc.what() << "\n";
-        exit(1);
+        return 1;
     }
+    
+    return 0;
 }
 
 
