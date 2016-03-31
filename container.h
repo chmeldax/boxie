@@ -8,15 +8,15 @@ public:
     void run_command(const std::string& command, const std::vector<std::string>& args);
     
 private:
-    Container(std::string hostname) : hostname(hostname) {};
+    Container(std::string hostname);
     std::string hostname;
-    void change_hostname(std::string hostname);
+    void change_hostname();
 };
 
 class Container::Builder
 {
 public:
-    Builder& set_hostname(const std::string& hostname) { this->hostname = hostname; return *this; } 
+    Builder& set_hostname(const std::string hostname) { this->hostname = hostname; return *this; } 
     Container build() { return Container(hostname); }
     
 private:

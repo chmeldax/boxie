@@ -42,19 +42,16 @@ int run(void* arg)
 
 int main(int argc, char *argv[])
 {
-    struct utsname uts;
     char *stack = (char*) malloc(STACK_SIZE);
     
     pid_t pid = clone(run, (stack + STACK_SIZE), CLONE_NEWUTS | SIGCHLD, argv);
     if (pid == -1)
     {
         std::cerr << "Creating new namespace failed. Error number: " << errno;
-        exit(1);
+        return 1;
     }
     
-    sleep(1);
-    
-    uname(&uts);
-    std::cout << "This is a parent's nodename: " << uts.nodename << std::endl;
     waitpid(pid, NULL, 0);
+    std::cout << "Removing container." << std::endl;
+    return 0;
 }
