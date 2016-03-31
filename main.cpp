@@ -8,45 +8,44 @@
 #include <string>
 #include <cstring>
 #include <vector>
-#include <algorithm>
 #include "container.h"
+
+Container build_container()
+{
+    const std::string name = "funny-name";
+    Container::Builder builder;
+    builder.set_hostname(name);
+    return builder.build();
+}
 
 int run(void* arg)
 {
-    const std::string name = "funny-name";
     char **argv = (char**) arg;
-    
-    Container::Builder builder;
-    builder.set_hostname(name);
-    Container container = builder.build();
-    
     const std::vector<std::string> args(1);
+    
+    Container container = build_container();
     try 
     {
         container.run_command((const std::string) argv[1], args);
     }
-    catch (std::exception const &exc)
+    catch (const std::exception& exc)
     {
         std::cerr << "Exception caught " << exc.what() << "\n";
+        exit(1);
     }
-    
-    struct utsname uts;
-    std::cout << "This is child" << std::endl;
-    uname(&uts);
-    std::cout << "This is a child's nodename: " << uts.nodename << std::endl;
 }
 
 
 int main(int argc, char *argv[])
 {
     struct utsname uts;
-    
     char *stack = (char*) malloc(1024*1024);
-    std::cout << "This is parent" << std::endl;
+    
     pid_t pid = clone(run, (stack + 1024*1024), CLONE_NEWUTS | SIGCHLD, argv);
     if (pid == -1)
     {
-        std::cout << "Creating new namespace failed. Error number: " << errno;
+        std::cerr << "Creating new namespace failed. Error number: " << errno;
+        exit(1);
     }
     
     sleep(1);
