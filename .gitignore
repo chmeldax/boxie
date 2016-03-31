@@ -1,3 +1,6 @@
+# Compiled
+boxie
+
 # Compiled Object files
 *.slo
 *.lo
@@ -26,3 +29,9 @@
 *.exe
 *.out
 *.app
+
+# IDE
+.codelite
+*.workspace
+*.project
+
