@@ -10,6 +10,8 @@
 #include <vector>
 #include "container.h"
 
+#define STACK_SIZE (1024 * 1024)
+
 Container build_container()
 {
     const std::string name = "funny-name";
@@ -41,9 +43,9 @@ int run(void* arg)
 int main(int argc, char *argv[])
 {
     struct utsname uts;
-    char *stack = (char*) malloc(1024*1024);
+    char *stack = (char*) malloc(STACK_SIZE);
     
-    pid_t pid = clone(run, (stack + 1024*1024), CLONE_NEWUTS | SIGCHLD, argv);
+    pid_t pid = clone(run, (stack + STACK_SIZE), CLONE_NEWUTS | SIGCHLD, argv);
     if (pid == -1)
     {
         std::cerr << "Creating new namespace failed. Error number: " << errno;
