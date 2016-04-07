@@ -23,12 +23,13 @@ Container build_container()
 int run(void* arg)
 {
     char **argv = (char**) arg;
-    const std::vector<std::string> args(1);
+    const std::string command = (const std::string) argv[1];
+    const std::vector<std::string> args = {command};
     
     Container container = build_container();
     try 
     {
-        container.run_command((const std::string) argv[1], args);
+        container.run_command(command, args);
     }
     catch (const std::exception& exc)
     {
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
 {
     char *stack = (char*) malloc(STACK_SIZE);
     
-    int flags = CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWNET | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUSER | 
+    int flags = CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWNET | CLONE_NEWNS | CLONE_NEWPID /*| CLONE_NEWUSER*/ |
     SIGCHLD;
     
     pid_t pid = clone(run, (stack + STACK_SIZE), flags, argv);

@@ -5,18 +5,20 @@ class Container
 {
 public:
     class Builder;
-    void run_command(const std::string& command, const std::vector<std::string>& args);
+    void run_command(const std::string command, const std::vector<std::string> args);
     
 private:
     Container(std::string hostname);
     std::string hostname;
+    std::string netnsname;
     void change_hostname();
+    void set_network();
 };
 
 class Container::Builder
 {
 public:
-    Builder& set_hostname(const std::string hostname) { this->hostname = hostname; return *this; } 
+    Builder& set_hostname(const std::string hostname) { this->hostname = hostname; return *this; }
     Container build() { return Container(hostname); }
     
 private:
