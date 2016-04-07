@@ -44,7 +44,10 @@ int main(int argc, char *argv[])
 {
     char *stack = (char*) malloc(STACK_SIZE);
     
-    pid_t pid = clone(run, (stack + STACK_SIZE), CLONE_NEWUTS | SIGCHLD, argv);
+    int flags = CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWNET | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUSER | 
+    SIGCHLD;
+    
+    pid_t pid = clone(run, (stack + STACK_SIZE), flags, argv);
     if (pid == -1)
     {
         std::cerr << "Creating new namespace failed. Error number: " << errno;
